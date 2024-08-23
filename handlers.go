@@ -58,7 +58,7 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// @felickz testing
+// @felickz testing - sql return one user instead of a tainted array
 func UserHandler(w http.ResponseWriter, r *http.Request) {
 	searchQuery := r.PostFormValue("search")
 	if searchQuery != "" {
@@ -126,6 +126,45 @@ func SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 			Email:      email,
 		}
 		err := templates.ExecuteTemplate(w, "subscribe", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		fmt.Println("Unsupported Method")
+	}
+}
+
+// @felickz testing - SimpleSubscribeHandler = remove intermediate struct and pass data direct
+func SimpleSubscribeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		data := SubscriberPageData{
+			PageHeader: PageHeader{
+				Title:       "Evil Corp Newsletter",
+				Description: "Subscribe to recieve updates about internal company events.",
+			},
+			Subscribed: false,
+			Name:       "",
+			Email:      "",
+		}
+		err := templates.ExecuteTemplate(w, "subscribe", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else if r.Method == "POST" {
+		name := r.PostFormValue("name")
+		// email := r.PostFormValue("email")
+		// data := SubscriberPageData{
+		// 	PageHeader: PageHeader{
+		// 		Title:       "Evil Corp Newsletter",
+		// 		Description: "Subscribe to recieve updates about internal company events.",
+		// 	},
+		// 	Subscribed: true,
+		// 	Name:       name,
+		// 	Email:      email,
+		// }
+		err := templates.ExecuteTemplate(w, "subscribe", name)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
