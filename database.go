@@ -69,3 +69,21 @@ func getUsers(search string) []User {
 	rows.Close()
 	return results
 }
+
+func getUser(search string) (User, error) {
+    var user User
+    db, err := sql.Open("sqlite3", "data/users.db")
+    if err != nil {
+        return user, err
+    }
+    defer db.Close()
+
+    selectUserQuery := "SELECT * FROM user WHERE (first_name LIKE ? OR last_name LIKE ?) AND admin == 'false' LIMIT 1;"
+    row := db.QueryRow(selectUserQuery, "%"+search+"%", "%"+search+"%")
+    err = row.Scan(&user.ID, &user.FirstName, &user.LastName, &user.Company, &user.Title, &user.Email, &user.Phone, &user.DOB, &user.SSN, &user.Salary, &user.Admin)
+    if err != nil {
+        return user, err
+    }
+
+    return user, nil
+}
