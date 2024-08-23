@@ -61,14 +61,21 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 func UserHandler(w http.ResponseWriter, r *http.Request) {
 	searchQuery := r.PostFormValue("search")
 	if searchQuery != "" {
+		user, err := getUser(searchQuery)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+
 		data := OneUserPageData{
 			PageHeader: PageHeader{
 				Title:       "Evil Corp Internal Directory",
 				Description: "Search for Evil Corp employees and contractors.",
 			},
-			AUser: getUser(searchQuery),
+			AUser: user,
 		}
-		err := templates.ExecuteTemplate(w, "users", data)
+
+		err = templates.ExecuteTemplate(w, "users", data)
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
@@ -88,7 +95,6 @@ func UserHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-
 
 func SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
