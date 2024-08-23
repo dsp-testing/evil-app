@@ -58,6 +58,7 @@ func UsersHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @felickz testing
 func UserHandler(w http.ResponseWriter, r *http.Request) {
 	searchQuery := r.PostFormValue("search")
 	if searchQuery != "" {

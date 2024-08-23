@@ -1,6 +1,6 @@
 package main
 
-//PageHeader ..
+// PageHeader ..
 type PageHeader struct {
 	Title       string
 	Description string
@@ -12,12 +12,12 @@ type UserPageData struct {
 	Users []User
 }
 
+// @felickz testing
 // OneUserPageData ...
 type OneUserPageData struct {
 	PageHeader
 	AUser User
 }
-
 
 // SubscriberPageData ...
 type SubscriberPageData struct {
