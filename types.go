@@ -12,6 +12,13 @@ type UserPageData struct {
 	Users []User
 }
 
+// OneUserPageData ...
+type OneUserPageData struct {
+	PageHeader
+	AUser User
+}
+
+
 // SubscriberPageData ...
 type SubscriberPageData struct {
 	PageHeader
