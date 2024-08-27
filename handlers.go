@@ -135,6 +135,45 @@ func SubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
+// @felickz testing - SimpleSubscribeHandler 
+func AFieldSubscribeHandler(w http.ResponseWriter, r *http.Request) {
+	if r.Method == "GET" {
+		data := SubscriberPageData{
+			PageHeader: PageHeader{
+				Title:       "Evil Corp Newsletter",
+				Description: "Subscribe to recieve updates about internal company events.",
+			},
+			Subscribed: false,
+			Name:       "",
+			Email:      "",
+		}
+		err := templates.ExecuteTemplate(w, "subscribe", data)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else if r.Method == "POST" {
+		name := r.PostFormValue("name")
+		email := r.PostFormValue("email")
+		data := SubscriberPageData{
+			PageHeader: PageHeader{
+				Title:       "Evil Corp Newsletter",
+				Description: "Subscribe to recieve updates about internal company events.",
+			},
+			Subscribed: true,
+			Name:       name,
+			Email:      email,
+		}
+		err := templates.ExecuteTemplate(w, "subscribe", data.Name)
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+	} else {
+		fmt.Println("Unsupported Method")
+	}
+}
+
 // @felickz testing - SimpleSubscribeHandler = remove intermediate struct and pass data direct
 func SimpleSubscribeHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method == "GET" {
